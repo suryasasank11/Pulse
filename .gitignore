@@ -5,3 +5,7 @@ data/
 .venv/
 venv/
 .pytest_cache/
+# Astro / Airflow local
+.astro/
+airflow_settings.yaml
+docker-compose.override.yml
