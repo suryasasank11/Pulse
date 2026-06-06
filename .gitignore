@@ -9,3 +9,6 @@ venv/
 .astro/
 airflow_settings.yaml
 docker-compose.override.yml
+
+# Spark / debug logs
+*.log
