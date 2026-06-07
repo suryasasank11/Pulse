@@ -1,0 +1,83 @@
+version: 2
+
+models:
+  - name: dim_source
+    description: "Source systems."
+    columns:
+      - name: source_key
+        tests: [not_null, unique]
+
+  - name: dim_company
+    description: "Hiring companies."
+    columns:
+      - name: company_key
+        tests: [not_null, unique]
+
+  - name: dim_location
+    description: "Distinct locations."
+    columns:
+      - name: location_key
+        tests: [not_null, unique]
+
+  - name: dim_skill
+    description: "Distinct skills with category."
+    columns:
+      - name: skill_key
+        tests: [not_null, unique]
+
+  - name: dim_role
+    description: "Job titles with inferred role family / seniority / employment type."
+    columns:
+      - name: role_key
+        tests: [not_null, unique]
+
+  - name: dim_date
+    description: "Calendar dimension."
+    columns:
+      - name: date_key
+        tests: [not_null, unique]
+
+  - name: fact_job_posting
+    description: "One row per job posting; links to all dimensions."
+    columns:
+      - name: job_posting_key
+        tests: [not_null, unique]
+      - name: company_key
+        tests:
+          - relationships:
+              to: ref('dim_company')
+              field: company_key
+      - name: location_key
+        tests:
+          - relationships:
+              to: ref('dim_location')
+              field: location_key
+      - name: source_key
+        tests:
+          - relationships:
+              to: ref('dim_source')
+              field: source_key
+      - name: role_key
+        tests:
+          - relationships:
+              to: ref('dim_role')
+              field: role_key
+      - name: date_key
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+
+  - name: fact_job_skill
+    description: "Posting-to-skill bridge."
+    columns:
+      - name: job_posting_key
+        tests:
+          - relationships:
+              to: ref('fact_job_posting')
+              field: job_posting_key
+      - name: skill_key
+        tests:
+          - relationships:
+              to: ref('dim_skill')
+              field: skill_key
