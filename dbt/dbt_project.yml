@@ -1,0 +1,17 @@
+name: 'pulse'
+version: '1.0.0'
+profile: 'pulse'
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+
+# staging = lightweight views in the STAGING schema
+# marts   = materialized tables (the star) in the MARTS schema
+models:
+  pulse:
+    staging:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: marts

@@ -1,0 +1,19 @@
+﻿version: 2
+
+models:
+  - name: stg_jobs
+    description: "Cleaned, typed, deduplicated job postings."
+    columns:
+      - name: posting_id
+        tests:
+          - not_null
+          - unique
+  - name: stg_job_skills
+    description: "Cleaned posting-to-skill pairs."
+    columns:
+      - name: posting_id
+        tests:
+          - not_null
+      - name: skill
+        tests:
+          - not_null

@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: pulse_raw
+    description: "Landing tables loaded from S3 silver Parquet via COPY."
+    database: PULSE
+    schema: RAW
+    tables:
+      - name: raw_jobs
+      - name: raw_job_skills

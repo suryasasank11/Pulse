@@ -1,0 +1,25 @@
+﻿with source as (
+    select * from {{ source('pulse_raw', 'raw_jobs') }}
+),
+
+cleaned as (
+    select
+        posting_id,
+        source,
+        trim(title)                          as title,
+        trim(company)                        as company,
+        trim(location_raw)                   as location_raw,
+        cast(salary_min_usd as number(12,2)) as salary_min_usd,
+        cast(salary_max_usd as number(12,2)) as salary_max_usd,
+        cast(salary_avg_usd as number(12,2)) as salary_avg_usd,
+        is_remote,
+        job_url,
+        cast(posted_at as timestamp_ntz)     as posted_at,
+        to_date(ingestion_date)              as ingestion_date
+    from source
+    where posting_id is not null
+)
+
+select *
+from cleaned
+qualify row_number() over (partition by posting_id order by ingestion_date desc) = 1
