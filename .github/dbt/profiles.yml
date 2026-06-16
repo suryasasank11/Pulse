@@ -1,0 +1,13 @@
+pulse:
+  target: ci
+  outputs:
+    ci:
+      type: snowflake
+      account: ci
+      user: ci
+      password: ci
+      role: ci
+      warehouse: ci
+      database: ci
+      schema: ci
+      threads: 1
