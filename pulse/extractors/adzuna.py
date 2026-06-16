@@ -10,6 +10,7 @@ and returns an OBJECT with a "results" array; we page through it and land the
 combined results array to bronze, so bronze stays a clean JSON array of records
 consistent with every other source.
 """
+
 from __future__ import annotations
 
 import json
@@ -38,9 +39,7 @@ class AdzunaExtractor(BaseExtractor):
 
     def fetch(self) -> bytes:
         if not self.app_id or not self.app_key:
-            raise ExtractionError(
-                "Adzuna: ADZUNA_APP_ID / ADZUNA_APP_KEY not set in environment"
-            )
+            raise ExtractionError("Adzuna: ADZUNA_APP_ID / ADZUNA_APP_KEY not set in environment")
 
         all_results: list = []
         for page in range(1, self.pages + 1):

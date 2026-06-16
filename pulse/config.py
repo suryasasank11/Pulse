@@ -4,6 +4,7 @@ Everything that changes between your laptop, CI, and production lives here
 and is read from environment variables (with sensible local defaults), so no
 secret or environment-specific value is ever hard-coded in the source.
 """
+
 from __future__ import annotations
 
 import os

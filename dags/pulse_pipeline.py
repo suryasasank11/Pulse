@@ -4,6 +4,7 @@ Extract and load run in-process (the pulse package is in the Airflow image).
 Silver runs the existing pulse-spark image as a sibling container via the
 mounted Docker socket, so the Spark/Java environment is reused as-is.
 """
+
 from __future__ import annotations
 
 import os

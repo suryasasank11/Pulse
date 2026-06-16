@@ -11,6 +11,7 @@ The package `pulse` is imported INSIDE the task (not at the top of the file)
 so DAG parsing stays fast and import errors surface as task failures, not as
 a broken DAG that won't even show up in the UI.
 """
+
 from __future__ import annotations
 
 import pendulum
@@ -21,12 +22,12 @@ from airflow.sdk import dag, task
     dag_id="ingest_remoteok",
     schedule="@daily",
     start_date=pendulum.datetime(2026, 6, 1, tz="UTC"),
-    catchup=False,            # do NOT replay every day since start_date on first unpause
-    max_active_runs=1,        # never run two copies at once
+    catchup=False,  # do NOT replay every day since start_date on first unpause
+    max_active_runs=1,  # never run two copies at once
     default_args={
         "retries": 3,
         "retry_delay": pendulum.duration(minutes=2),
-        "retry_exponential_backoff": True,                 # 2m, 4m, 8m...
+        "retry_exponential_backoff": True,  # 2m, 4m, 8m...
         "max_retry_delay": pendulum.duration(minutes=15),
     },
     tags=["pulse", "ingestion", "bronze"],

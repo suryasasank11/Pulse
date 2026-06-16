@@ -4,6 +4,7 @@ Bronze = exactly what we received, byte-for-byte, untouched, partitioned by
 source and ingestion date. Parsing and cleaning happen later in the silver
 layer, so the raw record is always available to reprocess.
 """
+
 from __future__ import annotations
 
 import logging
@@ -23,11 +24,7 @@ def _bronze_key(source: str, logical_date: date) -> str:
     Partitioning by ingestion_date also lets downstream queries read just one
     day's slice instead of scanning everything.
     """
-    return (
-        f"bronze/source={source}/"
-        f"ingestion_date={logical_date.isoformat()}/"
-        f"{source}.json"
-    )
+    return f"bronze/source={source}/ingestion_date={logical_date.isoformat()}/{source}.json"
 
 
 def write_bronze(payload: bytes, source: str, logical_date: date) -> str:

@@ -4,6 +4,7 @@ Usage (repo root, venv active):
     python run_usajobs.py
 Requires USAJOBS_API_KEY and USAJOBS_EMAIL in your .env.
 """
+
 import logging
 
 from dotenv import load_dotenv

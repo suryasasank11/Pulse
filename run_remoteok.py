@@ -1,4 +1,5 @@
-﻿import logging
+import logging
+
 from pulse.extractors.remoteok import RemoteOKExtractor
 
 logging.basicConfig(

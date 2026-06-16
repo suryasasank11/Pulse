@@ -1,6 +1,7 @@
 """A requests session hardened with retries, exponential backoff, and a
 default timeout — the transport layer every extractor shares.
 """
+
 from __future__ import annotations
 
 import requests

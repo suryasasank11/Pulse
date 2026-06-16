@@ -8,6 +8,7 @@ the current list of recent remote jobs. Two real-world quirks to know:
      not a job. We land the raw payload exactly as received and strip that
      element later, in the silver layer — bronze stays byte-for-byte raw.
 """
+
 from __future__ import annotations
 
 import logging
@@ -36,7 +37,5 @@ class RemoteOKExtractor(BaseExtractor):
         if resp.status_code != 200:
             # Transient 429/5xx were already retried by the session; if we are
             # still not at 200, the failure is permanent — fail fast and loud.
-            raise ExtractionError(
-                f"{self.source_name}: unexpected status {resp.status_code}"
-            )
+            raise ExtractionError(f"{self.source_name}: unexpected status {resp.status_code}")
         return resp.content

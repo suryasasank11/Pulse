@@ -11,13 +11,15 @@ Hardened for reliability:
 
 Run via the Docker image in spark/Dockerfile.
 """
+
 from __future__ import annotations
 
 import argparse
 import os
 from datetime import date
 
-from pyspark.sql import SparkSession, DataFrame, functions as F
+from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql import functions as F
 
 from pulse.config import settings
 
@@ -26,13 +28,15 @@ def build_spark() -> SparkSession:
     builder = SparkSession.builder.appName("pulse-silver-remoteok")
     if settings.data_lake_backend == "s3":
         builder = (
-            builder
-            .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+            builder.config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
             # Pass the credentials explicitly (the exact env keys boto3 succeeded
             # with) so S3A auth can't depend on provider-chain guesswork.
             .config("spark.hadoop.fs.s3a.access.key", os.getenv("AWS_ACCESS_KEY_ID", ""))
             .config("spark.hadoop.fs.s3a.secret.key", os.getenv("AWS_SECRET_ACCESS_KEY", ""))
-            .config("spark.hadoop.fs.s3a.endpoint", f"s3.{settings.aws_region}.amazonaws.com")
+            .config(
+                "spark.hadoop.fs.s3a.endpoint",
+                f"s3.{settings.aws_region}.amazonaws.com",
+            )
             .config("spark.hadoop.fs.s3a.endpoint.region", settings.aws_region)
             # Fewer renames when committing to object storage.
             .config("spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version", "2")
@@ -43,7 +47,8 @@ def build_spark() -> SparkSession:
 def storage_paths(run_date: date):
     d = run_date.isoformat()
     base = (
-        f"s3a://{settings.s3_bucket}" if settings.data_lake_backend == "s3"
+        f"s3a://{settings.s3_bucket}"
+        if settings.data_lake_backend == "s3"
         else "file://" + os.path.abspath(settings.data_lake_root)
     )
     return (
@@ -88,9 +93,14 @@ def main(run_date: date) -> None:
 
     # Normalize salary to annual USD; 0/null means unknown.
     norm = (
-        cleaned
-        .withColumn("salary_min_usd", F.when(F.col("salary_min_src") > 0, F.col("salary_min_src")))
-        .withColumn("salary_max_usd", F.when(F.col("salary_max_src") > 0, F.col("salary_max_src")))
+        cleaned.withColumn(
+            "salary_min_usd",
+            F.when(F.col("salary_min_src") > 0, F.col("salary_min_src")),
+        )
+        .withColumn(
+            "salary_max_usd",
+            F.when(F.col("salary_max_src") > 0, F.col("salary_max_src")),
+        )
         .withColumn(
             "salary_avg_usd",
             F.when(
@@ -102,11 +112,17 @@ def main(run_date: date) -> None:
         .withColumn("ingestion_date", F.lit(run_date.isoformat()))
     )
 
-    jobs_silver = norm.drop("salary_min_src", "salary_max_src", "tags").dropDuplicates(["posting_id"])
+    jobs_silver = norm.drop("salary_min_src", "salary_max_src", "tags").dropDuplicates(
+        ["posting_id"]
+    )
 
     if "tags" in norm.columns:
         skills_silver = (
-            norm.select("posting_id", "ingestion_date", F.explode_outer("tags").alias("skill_raw"))
+            norm.select(
+                "posting_id",
+                "ingestion_date",
+                F.explode_outer("tags").alias("skill_raw"),
+            )
             .withColumn("skill", F.lower(F.trim(F.col("skill_raw"))))
             .filter(F.col("skill").isNotNull() & (F.length("skill") > 0))
             .dropDuplicates(["posting_id", "skill"])
@@ -114,7 +130,8 @@ def main(run_date: date) -> None:
         )
     else:
         skills_silver = (
-            norm.select("posting_id", "ingestion_date").limit(0)
+            norm.select("posting_id", "ingestion_date")
+            .limit(0)
             .withColumn("skill", F.lit(None).cast("string"))
         )
 
@@ -123,7 +140,10 @@ def main(run_date: date) -> None:
     print(f"Writing skills -> {skills_path}", flush=True)
     skills_silver.write.mode("overwrite").parquet(skills_path)
 
-    print(f"DONE. Silver jobs: {jobs_silver.count()} rows | skills: {skills_silver.count()} rows", flush=True)
+    print(
+        f"DONE. Silver jobs: {jobs_silver.count()} rows | skills: {skills_silver.count()} rows",
+        flush=True,
+    )
     spark.stop()
 
 

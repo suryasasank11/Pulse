@@ -1,3 +1,4 @@
+![CI](https://github.com/suryasasank11/pulse/actions/workflows/ci.yml/badge.svg)
 # Pulse — Track Trends. Discover Opportunities.
 
 **Pulse** is a production-grade, end-to-end data platform that ingests job postings from

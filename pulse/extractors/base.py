@@ -4,6 +4,7 @@ Each source only implements fetch(); this base class owns the shared flow —
 fetch -> validate -> land to bronze — with consistent logging and error
 semantics. Adding a new source later means writing one small fetch() method.
 """
+
 from __future__ import annotations
 
 import json

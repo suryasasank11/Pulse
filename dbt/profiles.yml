@@ -1,13 +1,13 @@
 pulse:
-  target: prod
+  target: ci
   outputs:
-    prod:
+    ci:
       type: snowflake
-      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
-      user: "{{ env_var('SNOWFLAKE_USER') }}"
-      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
-      role: "{{ env_var('SNOWFLAKE_ROLE', 'SYSADMIN') }}"
-      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'PULSE_WH') }}"
-      database: "{{ env_var('SNOWFLAKE_DATABASE', 'PULSE') }}"
-      schema: MARTS
-      threads: 4
+      account: ci
+      user: ci
+      password: ci
+      role: ci
+      warehouse: ci
+      database: ci
+      schema: ci
+      threads: 1

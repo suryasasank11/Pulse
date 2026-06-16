@@ -8,6 +8,7 @@ bronze stays a clean JSON array consistent with the other sources.
 
 Defaults to occupational series 2210 (Information Technology Management).
 """
+
 from __future__ import annotations
 
 import json
@@ -36,9 +37,7 @@ class USAJobsExtractor(BaseExtractor):
 
     def fetch(self) -> bytes:
         if not self.api_key or not self.email:
-            raise ExtractionError(
-                "USAJobs: USAJOBS_API_KEY / USAJOBS_EMAIL not set in environment"
-            )
+            raise ExtractionError("USAJobs: USAJOBS_API_KEY / USAJOBS_EMAIL not set in environment")
 
         headers = {
             "Host": "data.usajobs.gov",

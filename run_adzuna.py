@@ -4,6 +4,7 @@ Usage (repo root, venv active):
     python run_adzuna.py
 Requires ADZUNA_APP_ID and ADZUNA_APP_KEY in your .env.
 """
+
 import logging
 
 from dotenv import load_dotenv
