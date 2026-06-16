@@ -45,28 +45,33 @@ models:
       - name: company_key
         tests:
           - relationships:
-              to: ref('dim_company')
-              field: company_key
+              arguments:
+                to: ref('dim_company')
+                field: company_key
       - name: location_key
         tests:
           - relationships:
-              to: ref('dim_location')
-              field: location_key
+              arguments:
+                to: ref('dim_location')
+                field: location_key
       - name: source_key
         tests:
           - relationships:
-              to: ref('dim_source')
-              field: source_key
+              arguments:
+                to: ref('dim_source')
+                field: source_key
       - name: role_key
         tests:
           - relationships:
-              to: ref('dim_role')
-              field: role_key
+              arguments:
+                to: ref('dim_role')
+                field: role_key
       - name: date_key
         tests:
           - relationships:
-              to: ref('dim_date')
-              field: date_key
+              arguments:
+                to: ref('dim_date')
+                field: date_key
 
   - name: fact_job_skill
     description: "Posting-to-skill bridge."
@@ -74,10 +79,12 @@ models:
       - name: job_posting_key
         tests:
           - relationships:
-              to: ref('fact_job_posting')
-              field: job_posting_key
+              arguments:
+                to: ref('fact_job_posting')
+                field: job_posting_key
       - name: skill_key
         tests:
           - relationships:
-              to: ref('dim_skill')
-              field: skill_key
+              arguments:
+                to: ref('dim_skill')
+                field: skill_key
